@@ -1,5 +1,7 @@
 # Device tree for Xiaomi Civi 3 (yuechu)
-The Xiaomi Civi 3 (codenamed _"yuechu"_) is a high-end, mid-range smartphone from Xiaomi.
+The Xiaomi Civi 3 (codenamed _"yuechu"_) is a mid-range smartphone from Xiaomi.
+
+It was announced on 2023, May 25. Release date was 2023, May 31.
 
 ## Device specifications
 
