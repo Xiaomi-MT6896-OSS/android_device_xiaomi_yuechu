@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+    Copyright (C) 2023 The LineageOS Project
+
+    SPDX-License-Identifier: Apache-2.0
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <dimen name="rounded_corner_radius">90.0px</dimen>
+    <dimen name="rounded_corner_radius_top">90.0px</dimen>
+    <dimen name="rounded_corner_radius_bottom">90.0px</dimen>
+    <dimen name="status_bar_height_default">119.0px</dimen>
+    <dimen name="status_bar_height_portrait">119.0px</dimen>
+    <dimen name="rounded_corner_content_padding">61.0px</dimen>
+</resources>

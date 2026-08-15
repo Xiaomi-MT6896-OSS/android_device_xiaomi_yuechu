@@ -1,0 +1,84 @@
+// Workaround for the vendor.dolby.hardware.dms@2.0 daemon on Android 16.
+//
+// The dms blob libdlbdsservice -> libsqlite (built from external/sqlite source,
+// pulled in as a shared_libs dep of libdlbdsservice) -> libandroidicu ->
+// libicuuc + libicui18n. libandroidicu/libicuuc/libicui18n ship only inside the
+// com.android.i18n APEX, which the A16 vendor linker namespace cannot see, so
+// the dms vendor daemon cannot resolve them and fails to start (CANNOT LINK
+// EXECUTABLE ... library "libandroidicu.so" not found).
+//
+// Vendor these three prebuilts so libsqlite's dependency chain resolves from
+// /vendor/lib(64). They share names with the external/icu source modules, so -
+// following the same trick LineageOS uses for libprotobuf in
+// hardware/lineage/compat - each prebuilt uses a distinct module name and
+// installs under its real stem (soname). The ICU data file (icudt76l.dat) is
+// still read from the APEX at runtime.
+
+cc_prebuilt_library_shared {
+    name: "libandroidicu-dolby-vendor",
+    stem: "libandroidicu",
+    owner: "xiaomi",
+    vendor: true,
+    strip: {
+        none: true,
+    },
+    // The DT_NEEDED set (libandroidicu -> libicuuc + libicui18n + libbase +
+    // liblog) is resolved at runtime entirely from /vendor (these three plus the
+    // AOSP-built libsqlite). Declaring libicuuc/libicui18n in shared_libs would
+    // pull the external/icu source modules, so skip the static elf check here.
+    check_elf_files: false,
+    target: {
+        android_arm64: {
+            srcs: ["lib64/libandroidicu.so"],
+        },
+        android_arm: {
+            srcs: ["lib/libandroidicu.so"],
+        },
+    },
+}
+
+cc_prebuilt_library_shared {
+    name: "libicuuc-dolby-vendor",
+    stem: "libicuuc",
+    owner: "xiaomi",
+    vendor: true,
+    strip: {
+        none: true,
+    },
+    // The DT_NEEDED set (libandroidicu -> libicuuc + libicui18n + libbase +
+    // liblog) is resolved at runtime entirely from /vendor (these three plus the
+    // AOSP-built libsqlite). Declaring libicuuc/libicui18n in shared_libs would
+    // pull the external/icu source modules, so skip the static elf check here.
+    check_elf_files: false,
+    target: {
+        android_arm64: {
+            srcs: ["lib64/libicuuc.so"],
+        },
+        android_arm: {
+            srcs: ["lib/libicuuc.so"],
+        },
+    },
+}
+
+cc_prebuilt_library_shared {
+    name: "libicui18n-dolby-vendor",
+    stem: "libicui18n",
+    owner: "xiaomi",
+    vendor: true,
+    strip: {
+        none: true,
+    },
+    // The DT_NEEDED set (libandroidicu -> libicuuc + libicui18n + libbase +
+    // liblog) is resolved at runtime entirely from /vendor (these three plus the
+    // AOSP-built libsqlite). Declaring libicuuc/libicui18n in shared_libs would
+    // pull the external/icu source modules, so skip the static elf check here.
+    check_elf_files: false,
+    target: {
+        android_arm64: {
+            srcs: ["lib64/libicui18n.so"],
+        },
+        android_arm: {
+            srcs: ["lib/libicui18n.so"],
+        },
+    },
+}

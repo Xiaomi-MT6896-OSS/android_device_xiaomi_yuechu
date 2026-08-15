@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Dolby DMS framework compatibility matrix entry.
+     optional="true" => framework knows about vendor.dolby.hardware.dms@2.0
+     (declared by the device manifest fragment) but does not require it, so the
+     device still boots even if the dms service is absent. -->
+<compatibility-matrix version="4.0" type="framework">
+    <hal format="hidl" optional="true">
+        <name>vendor.dolby.hardware.dms</name>
+        <transport>hwbinder</transport>
+        <version>2.0</version>
+        <interface>
+            <name>IDms</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+</compatibility-matrix>
