@@ -19,6 +19,20 @@ from extract_utils.main import (
     ExtractUtilsModule,
 )
 
+_displayservice_ping = (
+    b'_ZN7lineage10frameworks14displayservice4V1_014IEventCallback4pingEv'
+)
+_displayservice_unresolved = (
+    rb'_ZN7lineage10frameworks14displayservice4V1_01[45]I[A-Za-z0-9_]*'
+    rb'(?:linkToDeath|unlinkToDeath|getDebugInfo|getHashChain|'
+    rb'interfaceChain|interfaceDescriptor|5debug|registerForNotifications)'
+    rb'[A-Za-z0-9_]*'
+)
+_displayservice_ctor_vtable = (
+    rb'_ZTCN[A-Za-z0-9_]+E\d+_'
+    rb'N7lineage10frameworks14displayservice4V1_01[45]I[A-Za-z0-9_]*E'
+)
+
 namespace_imports = [
     'device/xiaomi/yuechu',
     'device/xiaomi/mt6895-common',
@@ -80,7 +94,7 @@ blob_fixups: blob_fixups_user_type = {
         .replace_needed('libcodec2_hidl@1.0.so', 'libcodec2_hidl@1.0-v31.so')
         .replace_needed('libcodec2_vndk.so', 'libcodec2_vndk-v31.so')
         .replace_needed('libstagefright_foundation.so', 'libstagefright_foundation-v33.so')
-        .replace_needed('libui.so', 'libui-v34.so'),
+        .replace_needed('libui.so', 'libui-v32.so'),
 
     'vendor/lib64/libcodec2_vpp_dolby_plugin.so': blob_fixup()
         .replace_needed('libcodec2_soft_common.so', 'libcodec2_soft_common-v31.so')
@@ -103,6 +117,19 @@ blob_fixups: blob_fixups_user_type = {
 
     'vendor/etc/vintf/manifest/manifest_media_c2_V1_1_default.xml': blob_fixup()
         .regex_replace('1.1', '1.2'),
+
+    'vendor/lib64/mt6895/libmtkcam_hal_android_app_cbadaptor.so': blob_fixup()
+        .replace_needed('android.frameworks.displayservice@1.0.so',
+                        'lineage.frameworks.displayservice@1.0.so')
+        .binary_regex_replace(
+            b'7android10frameworks14displayservice',
+            b'7lineage10frameworks14displayservice')
+        .binary_regex_replace(
+            _displayservice_unresolved,
+            lambda m: _displayservice_ping.ljust(len(m.group(0)), b'\x00'))
+        .binary_regex_replace(
+            _displayservice_ctor_vtable,
+            lambda m: _displayservice_ping.ljust(len(m.group(0)), b'\x00')),
 
     ('vendor/lib64/mt6895/libmtkcam_stdutils.so',
      'vendor/lib64/hw/mt6895/android.hardware.camera.provider@2.6-impl-mediatek.so'): blob_fixup()
