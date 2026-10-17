@@ -155,7 +155,8 @@ blob_fixups: blob_fixups_user_type = {
 		.add_needed('android.hardware.security.rkp-V3-ndk.so'),
 
 	'vendor/lib64/libmt_mitee@1.3.so': blob_fixup()
-    .replace_needed('android.hardware.security.keymint-V1-ndk_platform.so','android.hardware.security.keymint-V3-ndk-v34.so'),
+    .replace_needed('android.hardware.security.keymint-V1-ndk_platform.so','android.hardware.security.keymint-V3-ndk-v34.so')
+    .replace_needed('libkeymint_support.so', 'libkeymint_support_V4.so'),
 
 
     'vendor/lib64/hw/mt6895/vendor.mediatek.hardware.pq@2.15-impl.so': blob_fixup()
