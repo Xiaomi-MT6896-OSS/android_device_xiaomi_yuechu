@@ -105,6 +105,13 @@ blob_fixups: blob_fixups_user_type = {
         .replace_needed('libcodec2_soft_common.so', 'libcodec2_soft_common-v31.so')
         .replace_needed('libcodec2_vndk.so', 'libcodec2_vndk-v31.so'),
 
+    ('vendor/lib64/libcodec2_mtk_vdec.so',
+     'vendor/lib64/libcodec2_mtk_venc.so'): blob_fixup()
+        .replace_needed('libformatter.so', 'libformatter_mtk.so'),
+
+    ('vendor/lib/libcodec2_mtk_vdec.so', 'vendor/lib/libcodec2_mtk_venc.so'): blob_fixup()
+        .replace_needed('libformatter.so', 'libformatter_mtk.so'),
+
      'vendor/bin/hw/android.hardware.media.c2@1.2-mediatek-64b': blob_fixup()
         .add_needed('libstagefright_foundation-v33.so')
         .add_needed('libprocessgroup.so')
