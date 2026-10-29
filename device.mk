@@ -11,7 +11,7 @@ $(call inherit-product, device/xiaomi/mt6895-common/mt6895.mk)
 $(call soong_config_set_bool,surfaceflinger,register_displayservice,true)
 
 # MIUI Camera
-# $(call inherit-product, vendor/xiaomi/miuicamera-yuechu/device.mk)
+$(call inherit-product, vendor/xiaomi/miuicamera-yuechu/device.mk)
 
 # Audio (device-specific Dolby effect stack)
 PRODUCT_COPY_FILES += \
@@ -98,3 +98,27 @@ PRODUCT_COPY_FILES += \
 
 # Inherit the proprietary files
 $(call inherit-product, vendor/xiaomi/yuechu/yuechu-vendor.mk)
+
+# Camera decision configs (read by libcom.xiaomi.mizone; missing from the blob set)
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/camera/xiaomi/MiCamCPUControl.xml:$(TARGET_COPY_OUT_VENDOR)/etc/camera/xiaomi/MiCamCPUControl.xml \
+    $(LOCAL_PATH)/camera/xiaomi/dualbokehjpegsnapshot.json:$(TARGET_COPY_OUT_VENDOR)/etc/camera/xiaomi/dualbokehjpegsnapshot.json \
+    $(LOCAL_PATH)/camera/xiaomi/ecocloudinfo.json:$(TARGET_COPY_OUT_VENDOR)/etc/camera/xiaomi/ecocloudinfo.json \
+    $(LOCAL_PATH)/camera/xiaomi/ecoplatforminfo.json:$(TARGET_COPY_OUT_VENDOR)/etc/camera/xiaomi/ecoplatforminfo.json \
+    $(LOCAL_PATH)/camera/xiaomi/frontsupernightsnapshotjpeg.json:$(TARGET_COPY_OUT_VENDOR)/etc/camera/xiaomi/frontsupernightsnapshotjpeg.json \
+    $(LOCAL_PATH)/camera/xiaomi/mivisettings.json:$(TARGET_COPY_OUT_VENDOR)/etc/camera/xiaomi/mivisettings.json \
+    $(LOCAL_PATH)/camera/xiaomi/overridesettings.json:$(TARGET_COPY_OUT_VENDOR)/etc/camera/xiaomi/overridesettings.json \
+    $(LOCAL_PATH)/camera/xiaomi/rearsupernightsnapshot.json:$(TARGET_COPY_OUT_VENDOR)/etc/camera/xiaomi/rearsupernightsnapshot.json \
+    $(LOCAL_PATH)/camera/xiaomi/settings.json:$(TARGET_COPY_OUT_VENDOR)/etc/camera/xiaomi/settings.json \
+    $(LOCAL_PATH)/camera/xiaomi/thirdpartydualbokehyuvsnapshot.json:$(TARGET_COPY_OUT_VENDOR)/etc/camera/xiaomi/thirdpartydualbokehyuvsnapshot.json \
+    $(LOCAL_PATH)/camera/xiaomi/thirdpartyjpegsnapshot.json:$(TARGET_COPY_OUT_VENDOR)/etc/camera/xiaomi/thirdpartyjpegsnapshot.json \
+    $(LOCAL_PATH)/camera/xiaomi/thirdpartyrawsupernightjpeg.json:$(TARGET_COPY_OUT_VENDOR)/etc/camera/xiaomi/thirdpartyrawsupernightjpeg.json \
+    $(LOCAL_PATH)/camera/xiaomi/thirdpartyrawsupernightyuv.json:$(TARGET_COPY_OUT_VENDOR)/etc/camera/xiaomi/thirdpartyrawsupernightyuv.json
+
+# Camera resources (AI models, filter LUTs, VIDHANCE license, ...) that the
+# generated vendor blob list does not carry.
+$(call inherit-product, vendor/xiaomi/yuechu/camera-resources.mk)
+
+# Not well-formed XML, so installed via prebuilt_etc instead of a copy rule.
+PRODUCT_PACKAGES += \
+    gma_custom_xml

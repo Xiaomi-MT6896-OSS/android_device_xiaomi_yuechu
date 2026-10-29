@@ -1,0 +1,143 @@
+{
+    "DecisionList": {
+        "common": {
+            "YuvStreamResolutionOptions": {
+                "AspectRatioList": [
+                    1,
+                    1.33333,
+                    1.77777,
+                    2.22222
+                ],
+                // the tolerance shouldn't be too small. otherwise, mihal will choose the wrong resolution. 
+                "Tolerance": 0.05,
+                "UpScaleSizeFactor": 2
+            }
+        },
+        "Sat": {
+            "NumOfSnapshotRequiredBySR": 8,
+            "SrFusionZoomRegion": {
+                "lowerBound": 3.0,
+                "upperBound": 5.0
+            },
+            "MfnrFusionZoomRegion": {
+                "lowerBound": 0.6,
+                "upperBound": 1.0
+            },
+            "MaxQuickShotNums": 2,
+            "isSupportUWSuperNightSE": 1,
+            "isSupportHdSr": 1,
+            "isSupportSrReprocess": 1
+        },
+        "Simple": {
+            "HdrType": 2,
+            "MFNRHDRSetting": {
+                "MFNRNums": 5
+            },
+            "doFrontY2YScale": 1
+        },
+        "ProfessionalMode": {
+        },
+        "Bokeh": {
+            "isSupportSEBokeh": 0,
+            "isSupportHDRBokeh": 1
+        },
+        "SuperHD": {
+            "SuperResolToBinningResolFactor": 2
+        },
+        "SuperNight": {
+            "isFrontRawProcess": 1,
+            "isSupportFrontSnPlusFlash": 1
+        }
+    },
+    //Each stream 512M memory default
+    "CaptureBufferThreshold": 536870912,
+    "MialgoTaskConsumption": {
+        "MialgoCapacity": 10,
+        "MI_ALGO_NONE": 0,
+        "MI_ALGO_VENDOR_MFNR": 0,
+        "MI_ALGO_MIHAL_MFNR": 2,
+        "MI_ALGO_HDR": 2,
+        "MI_ALGO_LLHDR": 2,
+        "MI_ALGO_VENDOR_MFNR_HDR": 2,
+        "MI_ALGO_MIHAL_MFNR_HDR": 2,
+        "MI_ALGO_SR": 2,
+        "MI_ALGO_HD_UPSCALE": 10,
+        "MI_ALGO_FUSION": 1,
+        "MI_ALGO_BOKEH": 2,
+        "MI_ALGO_BOKEH_VENDOR_MFNR": 2,
+        "MI_ALGO_BOKEH_MIHAL_MFNR": 4,
+        "MI_ALGO_SUPERNIGHT_BACK": 2,
+        "MI_ALGO_SUPERNIGHT_FRONT": 2,
+        "MI_ALGO_BOKEH_HDR": 4,
+        "MI_ALGO_BOKEH_SUPERNIGHT": 5,
+        "MI_ALGO_SR_HDR": 2,
+        "MI_ALGO_FUSION_SR": 2,
+        "MI_ALGO_MIHAL_AINR": 2
+    },
+    "QuickShot": {
+        /**
+        *Bit Mask for HighQualityQuickShotDelayTime configure
+        *Bit[0 ~ 3]   - DelayTime XX ms of Bokeh MFNR in Back Camera
+        *Bit[4 ~ 7]   - DelayTime XX ms of Bokeh MFNR in Front Camera
+        *Bit[8 ~ 11]  - DelayTime XX ms of Back Normal Capture
+        *Bit[12 ~ 15] - DelayTime XX ms of HDR in Front Camera
+        *Bit[16 ~ 19] - DelayTime XX ms of HDR in Back Camera
+        *Bit[20 ~ 23] - DelayTime XX ms of SuperNightSe in Back Camera
+        *Bit[24 ~ 27] - DelayTime XX ms of SR in Back Camera
+        *Bit[28 ~ 31] - DelayTime XX ms of Front Normal Capture
+        *Bit[32 ~ 35] - DelayTime XX ms of MIHAL AINR in Back Camera
+        *Bit[40 ~ 63] - reserv
+        */
+        "QuickShotDelayTimeMask": "0x0000000004",
+        /**
+        * Bit Mask Of HighQualityQuickShot Support
+        * Bit[0]		 - Support MFSR/LLS in SAT mode
+        * Bit[1]		 - Support HDR in SAT mode
+        * Bit[2]		 - Support SR in SAT mode
+        * Bit[3]		 - Support SuperNightSE in SAT mode
+        * Bit[4~7]   - reserve
+        * Bit[8]		 - Support Bokeh MFNR in Back Camera
+        * Bit[9]		 - Support Bokeh HDR in Back Camera
+        * Bit[10] 	- Support MFNR in Front Camera
+        * Bit[11] 	- Support HDR in Front Camera
+        * Bit[12] 	- Support Bokeh in Front Camera
+        * Bit[13] 	- Support  Macro Mode
+        * Bit[14~15]	 - reserve
+        * Bit[16~19]	 - HighQualityQuickShot queue length(max number of HighQualityQuickShot)
+        * Bit[20] 	 - Support reuse RDI buffer or not
+        * Bit[21] 	 - Support Limit MFNR input frames or not
+        * Bit[22] 	 - Support Quickshot and HightQualityQuickShot Mixed Used
+        * Bit[23] 	 - Is it not Supported shutter Shot
+        * Bit[24~31]	 - reserve
+        **/
+        "QuickShotSupportedMask": "0xC30007"
+    },
+    /**
+    *  For PowerSaving
+    *  Mode: 1 enable, 2 disable
+    *  TrigerTemp: 38000
+    *  TrigerTime: 18 * 10 = 180s = 3min
+    *  CLUSTER_0: CPU0 - CPU3
+    *  CLUSTER_1: CPU4 - CPU6
+    *  CLUSTER_2: CPU7
+    **/
+    "PowerSaving": {
+        "Mode": 1,
+        "TrigerTemp": 38000,
+        "TrigerTime": 18
+    },
+    "PowerSavingConfiguration": {
+        "CLUSTER_0": {
+            "PERF_RES_CPUFREQ_MIN": -1,
+            "PERF_RES_CPUFREQ_MAX": -1
+        },
+        "CLUSTER_1": {
+            "PERF_RES_CPUFREQ_MIN": -1,
+            "PERF_RES_CPUFREQ_MAX": -1
+        },
+        "CLUSTER_2": {
+            "PERF_RES_CPUFREQ_MIN": -1,
+            "PERF_RES_CPUFREQ_MAX": 2400000
+        }
+    }
+}

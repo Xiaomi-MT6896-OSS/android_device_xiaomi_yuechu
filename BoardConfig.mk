@@ -48,4 +48,4 @@ DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += \
 
 # Inherit the proprietary files
 include vendor/xiaomi/yuechu/BoardConfigVendor.mk
-# include vendor/xiaomi/miuicamera-yuechu/BoardConfig.mk
+include vendor/xiaomi/miuicamera-yuechu/BoardConfig.mk
