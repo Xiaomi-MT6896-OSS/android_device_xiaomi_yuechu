@@ -19,8 +19,11 @@ PRODUCT_COPY_FILES += \
 
 # Dolby (DAP engine). Controller app; effect libs (libswdap/libswvqe/libswgamedap)
 # and the dms@2.0 service come from proprietary-files.txt, registered in audio_effects.xml.
-PRODUCT_PACKAGES += \
-    XiaomiDolby
+# TODO: The XiaomiDolby controller app is not provided by any repository yet, so
+# referencing it here fails the build. Commented out to keep the build complete;
+# restore once the Dolby integration is finished.
+# PRODUCT_PACKAGES += \
+#     XiaomiDolby
 
 # libdlbdsservice.so (in the dms daemon) pulls in libsqlite -> libandroidicu ->
 # libicuuc/libicui18n. libsqlite is built from source (external/sqlite) and
