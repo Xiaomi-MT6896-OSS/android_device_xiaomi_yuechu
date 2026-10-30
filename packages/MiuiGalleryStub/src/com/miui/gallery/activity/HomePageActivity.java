@@ -54,7 +54,16 @@ public class HomePageActivity extends Activity {
 
     private boolean launchLineageGallery() {
         try {
-            Intent target = new Intent(getIntent());
+            Intent source = getIntent();
+            Intent target;
+            if (source.getData() != null) {
+                // Gallery2 only starts SinglePhotoPage for ACTION_VIEW; the
+                // camera sends com.android.camera.action.REVIEW.
+                target = new Intent(Intent.ACTION_VIEW);
+                target.setDataAndType(source.getData(), source.getType());
+            } else {
+                target = new Intent(source);
+            }
             target.setComponent(GALLERY);
             target.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(target);
