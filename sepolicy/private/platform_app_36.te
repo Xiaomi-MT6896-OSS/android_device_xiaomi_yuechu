@@ -1,0 +1,5 @@
+# MIUI Camera loads downloaded Mimoji/AR native libraries from its app data
+# directory (Qigsaw dynamic feature).  Android 17 puts the camera in the
+# platform_app_36 domain instead of platform_app; both need execute permission
+# on app_data_file for dlopen() of these feature libs.
+allow platform_app_36 app_data_file:file execute;
