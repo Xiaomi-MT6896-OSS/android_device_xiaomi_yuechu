@@ -1,0 +1,19 @@
+// Publish the MTK vendor Y16 depth format in the standard scaler keys.
+cc_library_shared {
+    name: "libcammeta_inject",
+    vendor: true,
+    compile_multilib: "64",
+    srcs: ["cammeta_inject.cpp"],
+    shared_libs: [
+        "liblog",
+        "libdl",
+        "libcamera_metadata",
+    ],
+    header_libs: [
+        "libcutils_headers",
+    ],
+    cflags: [
+        "-Wall",
+        "-Wno-unused-parameter",
+    ],
+}

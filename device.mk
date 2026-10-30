@@ -119,6 +119,11 @@ PRODUCT_COPY_FILES += \
 # generated vendor blob list does not carry.
 $(call inherit-product, vendor/xiaomi/yuechu/camera-resources.mk)
 
+# Camera metadata inject: publish the vendor Y16 depth format in the
+# standard scaler keys so cameraserver accepts the portrait stream.
+PRODUCT_PACKAGES += \
+    libcammeta_inject
+
 # Not well-formed XML, so installed via prebuilt_etc instead of a copy rule.
 PRODUCT_PACKAGES += \
     gma_custom_xml
