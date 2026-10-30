@@ -124,6 +124,12 @@ $(call inherit-product, vendor/xiaomi/yuechu/camera-resources.mk)
 PRODUCT_PACKAGES += \
     libcammeta_inject
 
+# Lineage Gallery2 + a thin com.miui.gallery wrapper so the camera thumbnail
+# opens the system gallery instead of the missing MIUI Gallery.
+PRODUCT_PACKAGES += \
+    Gallery2 \
+    MiuiGalleryStub
+
 # Not well-formed XML, so installed via prebuilt_etc instead of a copy rule.
 PRODUCT_PACKAGES += \
     gma_custom_xml

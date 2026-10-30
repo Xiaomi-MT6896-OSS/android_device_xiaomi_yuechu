@@ -1,0 +1,12 @@
+android_app {
+    name: "MiuiGalleryStub",
+    manifest: "AndroidManifest.xml",
+    srcs: ["src/**/*.java"],
+    sdk_version: "current",
+    certificate: "platform",
+    privileged: true,
+    product_specific: true,
+    optimize: {
+        enabled: false,
+    },
+}
