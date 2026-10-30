@@ -127,7 +127,7 @@ PRODUCT_PACKAGES += \
 # Lineage Gallery2 + a thin com.miui.gallery wrapper so the camera thumbnail
 # opens the system gallery instead of the missing MIUI Gallery.
 PRODUCT_PACKAGES += \
-    Gallery2 \
+    Gallery2Patched \
     MiuiGalleryStub
 
 # Not well-formed XML, so installed via prebuilt_etc instead of a copy rule.

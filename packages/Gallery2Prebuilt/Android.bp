@@ -1,0 +1,10 @@
+android_app_import {
+    name: "Gallery2Patched",
+    apk: "Gallery2.apk",
+    certificate: "platform",
+    product_specific: true,
+    overrides: ["Gallery2"],
+    dex_preopt: {
+        enabled: false,
+    },
+}
