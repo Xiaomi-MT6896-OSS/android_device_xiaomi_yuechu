@@ -3,7 +3,10 @@ package com.miui.gallery.activity;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.util.Log;
 
 public class HomePageActivity extends Activity {
@@ -14,15 +17,39 @@ public class HomePageActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        if (isSlowMotionVideo(intent)) {
+            startActivity(new Intent(intent)
+                    .setClass(this, SlowMotionActivity.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            finish();
+            return;
+        }
         if (launchLineageGallery()) {
             return;
         }
-        Intent intent = getIntent();
         if (Intent.ACTION_VIEW.equals(intent.getAction()) && intent.getData() != null) {
             showImageFallback(intent);
         } else {
             showEmpty();
         }
+    }
+
+    private boolean isSlowMotionVideo(Intent intent) {
+        Uri uri = intent.getData();
+        if (uri == null) return false;
+        String type = intent.getType();
+        if (type == null || !type.startsWith("video/")) return false;
+        try (Cursor c = getContentResolver().query(uri,
+                new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null)) {
+            if (c != null && c.moveToFirst()) {
+                String name = c.getString(0);
+                return name != null && name.contains("HSR_120");
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "cannot query display name", e);
+        }
+        return false;
     }
 
     private boolean launchLineageGallery() {
