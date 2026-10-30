@@ -12,9 +12,12 @@
         <activity
             android:name=".activity.HomePageActivity"
             android:exported="true">
+            <!-- No CATEGORY_LAUNCHER on purpose: the stub must not show an
+                 icon in the app drawer, but it still has to answer the
+                 camera's ACTION_MAIN + setPackage("com.miui.gallery") call
+                 (GalleryHelper.gotoGallery) and the REVIEW/VIEW intents. -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
