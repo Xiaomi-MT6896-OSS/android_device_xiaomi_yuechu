@@ -110,6 +110,11 @@ public class PhotoActivity extends Activity {
         mIndex = 0;
         loadSiblings(uri);
         load(uri);
+        // The camera hands us a read grant for the photo it just took, but
+        // swiping through the folder needs the media permission as well.
+        if (!hasReadPermission()) {
+            requestPermissions(readPermissions(), REQ_PERM);
+        }
     }
 
     @Override
