@@ -126,10 +126,12 @@ PRODUCT_PACKAGES += \
 
 # com.miui.gallery stub: the camera's review intents land here, it shows the
 # photo/video itself (zoom, swipe, slow-motion) and hands editing over to
-# Gallery2's exported FilterShowActivity.  Gallery2 itself comes from
-# handheld_product.mk and stays installed for edit/crop/trim only.
+# Gallery2's exported FilterShowActivity.  Gallery2 is installed only for its
+# exported edit/crop/trim activities; all of its launcher activities are
+# disabled in its own manifest.
 PRODUCT_PACKAGES += \
-    MiuiGalleryStub
+    MiuiGalleryStub \
+    Gallery2
 
 # Not well-formed XML, so installed via prebuilt_etc instead of a copy rule.
 PRODUCT_PACKAGES += \
