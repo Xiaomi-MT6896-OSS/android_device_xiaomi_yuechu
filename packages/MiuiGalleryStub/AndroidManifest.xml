@@ -8,14 +8,13 @@
 
     <application
         android:label="Gallery"
-        android:theme="@android:style/Theme.Material.Light.NoActionBar">
+        android:theme="@android:style/Theme.Material.NoActionBar">
         <activity
             android:name=".activity.HomePageActivity"
             android:exported="true">
-            <!-- No CATEGORY_LAUNCHER on purpose: the stub must not show an
-                 icon in the app drawer, but it still has to answer the
-                 camera's ACTION_MAIN + setPackage("com.miui.gallery") call
-                 (GalleryHelper.gotoGallery) and the REVIEW/VIEW intents. -->
+            <!-- No CATEGORY_LAUNCHER: the stub must not show an icon.  The bare
+                 MAIN action keeps GalleryHelper.gotoGallery's
+                 ACTION_MAIN + setPackage("com.miui.gallery") resolvable. -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
@@ -33,8 +32,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.SlowMotionActivity"
+            android:name=".activity.PhotoActivity"
             android:exported="false"
-            android:theme="@android:style/Theme.Material.NoActionBar.Fullscreen" />
+            android:theme="@android:style/Theme.Material.NoActionBar"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize" />
+        <activity
+            android:name=".activity.VideoActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.Material.NoActionBar.Fullscreen"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
     </application>
 </manifest>

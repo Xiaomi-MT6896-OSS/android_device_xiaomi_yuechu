@@ -1,96 +1,74 @@
 package com.miui.gallery.activity;
 
 import android.app.Activity;
-import android.content.ComponentName;
+import android.content.ContentUris;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.OpenableColumns;
+import android.provider.MediaStore;
 import android.util.Log;
 
+/**
+ * Entry point that replaces com.miui.gallery for MiuiCamera.
+ *
+ * The camera sends a review intent (ACTION_VIEW with a content:// URI, or
+ * ACTION_MAIN + setPackage("com.miui.gallery") for the "open gallery" button).
+ * This stub only *views*: photos go to PhotoActivity, videos to VideoActivity.
+ * Editing/cropping still lives in Gallery2's exported FilterShowActivity,
+ * CropActivity and TrimVideo.
+ */
 public class HomePageActivity extends Activity {
     private static final String TAG = "MiuiGalleryStub";
-    private static final ComponentName GALLERY = new ComponentName(
-            "com.android.gallery3d", "com.android.gallery3d.app.GalleryActivity");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        if (isSlowMotionVideo(intent)) {
-            startActivity(new Intent(intent)
-                    .setClass(this, SlowMotionActivity.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        Uri uri = intent != null ? intent.getData() : null;
+
+        if (uri == null) {
+            uri = latestImage();
+        }
+        if (uri == null) {
+            Log.w(TAG, "no media to show");
             finish();
             return;
         }
-        if (launchLineageGallery()) {
-            return;
+
+        String type = intent != null ? intent.getType() : null;
+        if (type == null) {
+            type = getContentResolver().getType(uri);
         }
-        if (Intent.ACTION_VIEW.equals(intent.getAction()) && intent.getData() != null) {
-            showImageFallback(intent);
-        } else {
-            showEmpty();
+        boolean isVideo = type != null && type.startsWith("video/");
+
+        Intent next = new Intent(this, isVideo ? VideoActivity.class : PhotoActivity.class);
+        next.setData(uri);
+        if (isVideo) {
+            next.putExtra(VideoActivity.EXTRA_SPEED, isSlowMotion(uri) ? 0.25f : 1.0f);
         }
+        startActivity(next);
+        finish();
     }
 
-    private boolean isSlowMotionVideo(Intent intent) {
-        Uri uri = intent.getData();
-        if (uri == null) return false;
-        String type = intent.getType();
-        if (type == null || !type.startsWith("video/")) return false;
-        try (Cursor c = getContentResolver().query(uri,
-                new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null)) {
+    /** Newest photo on the device, used when the camera asks for the gallery home. */
+    private Uri latestImage() {
+        try (android.database.Cursor c = getContentResolver().query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                new String[]{MediaStore.MediaColumns._ID},
+                null, null,
+                MediaStore.MediaColumns.DATE_ADDED + " DESC")) {
             if (c != null && c.moveToFirst()) {
-                String name = c.getString(0);
-                return name != null && name.contains("HSR_120");
+                return ContentUris.withAppendedId(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, c.getLong(0));
             }
         } catch (Exception e) {
-            Log.w(TAG, "cannot query display name", e);
+            Log.w(TAG, "latestImage failed", e);
         }
-        return false;
+        return null;
     }
 
-    private boolean launchLineageGallery() {
-        try {
-            Intent source = getIntent();
-            Intent target;
-            if (source.getData() != null) {
-                // Gallery2 only starts SinglePhotoPage for ACTION_VIEW; the
-                // camera sends com.android.camera.action.REVIEW.
-                target = new Intent(Intent.ACTION_VIEW);
-                target.setDataAndType(source.getData(), source.getType());
-            } else {
-                target = new Intent(source);
-            }
-            target.setComponent(GALLERY);
-            target.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(target);
-            finish();
-            return true;
-        } catch (Exception e) {
-            Log.w(TAG, "cannot launch Lineage Gallery", e);
-            return false;
-        }
-    }
-
-    private void showImageFallback(Intent intent) {
-        android.widget.ImageView view = new android.widget.ImageView(this);
-        view.setScaleType(android.widget.ImageView.ScaleType.FIT_CENTER);
-        try {
-            view.setImageBitmap(getContentResolver().loadThumbnail(
-                    intent.getData(), new android.util.Size(1080, 1920), null));
-        } catch (Exception e) {
-            view.setImageURI(intent.getData());
-        }
-        setContentView(view);
-    }
-
-    private void showEmpty() {
-        android.widget.TextView view = new android.widget.TextView(this);
-        view.setText("Gallery unavailable");
-        view.setGravity(android.view.Gravity.CENTER);
-        setContentView(view);
+    private boolean isSlowMotion(Uri uri) {
+        String name = FileNames.displayName(getContentResolver(), uri);
+        return name != null && name.contains("HSR_120");
     }
 }
